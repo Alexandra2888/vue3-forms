@@ -1,29 +1,47 @@
 <template>
-  <input
-    type="radio"
-    :checked="modelValue === value"
-    :value="value"
-    v-bind="$attrs"
-    @change="$emit('update:modelValue', value)"
-  />
-  <label v-if="label">{{ label }}</label>
+  <component
+    v-for="option in options"
+    :key="option.value"
+    :is="vertical ? 'div' : 'span'"
+    :class="{
+      horizontal: !vertical,
+    }"
+  >
+    <BaseRadio
+      :label="option.label"
+      :value="option.value"
+      :modelValue="modelValue"
+      :name="name"
+      @update:modelValue="$emit('update:modelValue', $event)"
+    />
+  </component>
 </template>
 
 <script>
 export default {
   props: {
-    label: {
+    options: {
+      type: Array,
+      required: true,
+    },
+    name: {
       type: String,
-      default: "",
+      required: true,
     },
     modelValue: {
       type: [String, Number],
-      default: "",
-    },
-    value: {
-      type: [String, Number],
       required: true,
+    },
+    vertical: {
+      type: Boolean,
+      default: false,
     },
   },
 };
 </script>
+
+<style scoped>
+.horizontal {
+  margin-right: 20px;
+}
+</style>
